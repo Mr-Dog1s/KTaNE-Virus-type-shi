@@ -6,5 +6,10 @@ namespace KTaNE_Virus_type_shi
         {
             InitializeComponent();
         }
+
+        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
+        {
+
+        }
     }
 }
