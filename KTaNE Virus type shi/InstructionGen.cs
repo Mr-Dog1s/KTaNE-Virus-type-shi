@@ -26,14 +26,14 @@ namespace KTaNE_Virus_type_shi
                 Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
                 Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
                 Environment.GetFolderPath(Environment.SpecialFolder.MyMusic),
-                "C://"
             };
 
-            foreach (string folder in Folders.OrderBy(_ => rng.Next()).Take(5))
+            foreach (string folder in Folders.OrderBy(_ => rng.Next()).Take(4))
             {
                 string file = Path.Combine(folder, "instruction.txt");
                 index = index + 1;
-                File.WriteAllText(folder, Instructions[index]);
+                File.WriteAllText(file, Instructions[index]);
+                Debug.WriteLine(folder);
             }
         }
     }
