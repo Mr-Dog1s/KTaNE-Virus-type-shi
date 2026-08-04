@@ -57,7 +57,6 @@
             monthCalendar1.Location = new Point(619, 83);
             monthCalendar1.Name = "monthCalendar1";
             monthCalendar1.TabIndex = 0;
-            monthCalendar1.DateChanged += monthCalendar1_DateChanged;
             // 
             // dateTimePicker1
             // 

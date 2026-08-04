@@ -1,3 +1,5 @@
+using static KTaNE_Virus_type_shi.InstructionGen;
+
 namespace KTaNE_Virus_type_shi
 {
     public partial class Form1 : Form
@@ -5,11 +7,10 @@ namespace KTaNE_Virus_type_shi
         public Form1()
         {
             InitializeComponent();
+
+            new InstructionGen();
         }
 
-        private void monthCalendar1_DateChanged(object sender, DateRangeEventArgs e)
-        {
 
-        }
     }
 }
