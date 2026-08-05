@@ -6,11 +6,15 @@ namespace KTaNE_Virus_type_shi
     {
         public Form1()
         {
+
             InitializeComponent();
 
             new InstructionGen();
+        
+        
+        
+        
+        
         }
-
-
     }
 }
