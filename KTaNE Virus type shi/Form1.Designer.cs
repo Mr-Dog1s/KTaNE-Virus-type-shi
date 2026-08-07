@@ -239,9 +239,9 @@
             label1.ForeColor = Color.IndianRed;
             label1.Location = new Point(693, 9);
             label1.Name = "label1";
-            label1.Size = new Size(90, 37);
+            label1.Size = new Size(68, 37);
             label1.TabIndex = 20;
-            label1.Text = "label1";
+            label1.Text = "0:00";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // Form1
