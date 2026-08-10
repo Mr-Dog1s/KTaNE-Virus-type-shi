@@ -95,8 +95,9 @@
             button2.Name = "button2";
             button2.Size = new Size(130, 23);
             button2.TabIndex = 5;
-            button2.Text = "button2";
+            button2.Text = "Submit";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // textBox1
             // 
@@ -206,10 +207,10 @@
             radioButton1.AutoSize = true;
             radioButton1.Location = new Point(497, 132);
             radioButton1.Name = "radioButton1";
-            radioButton1.Size = new Size(94, 19);
+            radioButton1.Size = new Size(42, 19);
             radioButton1.TabIndex = 17;
             radioButton1.TabStop = true;
-            radioButton1.Text = "radioButton1";
+            radioButton1.Text = "Yes";
             radioButton1.UseVisualStyleBackColor = true;
             // 
             // radioButton2
@@ -217,10 +218,10 @@
             radioButton2.AutoSize = true;
             radioButton2.Location = new Point(497, 182);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new Size(94, 19);
+            radioButton2.Size = new Size(41, 19);
             radioButton2.TabIndex = 18;
             radioButton2.TabStop = true;
-            radioButton2.Text = "radioButton2";
+            radioButton2.Text = "No";
             radioButton2.UseVisualStyleBackColor = true;
             // 
             // button5
@@ -229,7 +230,7 @@
             button5.Name = "button5";
             button5.Size = new Size(75, 23);
             button5.TabIndex = 19;
-            button5.Text = "button5";
+            button5.Text = "Submit";
             button5.UseVisualStyleBackColor = true;
             // 
             // label1
