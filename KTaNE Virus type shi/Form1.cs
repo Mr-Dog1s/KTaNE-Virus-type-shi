@@ -13,6 +13,8 @@ namespace KTaNE_Virus_type_shi
 
         private readonly CheckBox[] checkBoxes;
 
+        public int index;
+
         public Form1()
         {
             MessageBox.Show("Im a very stronk virus, you have around 5 minutes to defuse the bomb " +
@@ -43,6 +45,18 @@ namespace KTaNE_Virus_type_shi
                     checkBox7
                 ];
 
+
+            toolTip1.SetToolTip(labelToolTip1, "Elite ball knowledge correlation, but two are not related, maybe");
+
+            toolTip1.SetToolTip(labelToolTip2, "Simple CAPCHA, find what you gotta look for");
+
+            toolTip1.SetToolTip(labelToolTip3, "Cliché, isnt it? Cut one wire");
+
+            toolTip1.SetToolTip(labelToolTip4, "One question, obvious really, but what is it?");
+
+            toolTip1.SetToolTip(labelToolTip5, "Hope you good with dates, twin");
+
+
             progressBar1.Minimum = 0;
 
             progressBar1.Maximum = 100;
@@ -72,8 +86,10 @@ namespace KTaNE_Virus_type_shi
 
             checkedListBox1.Items.AddRange(keyGen.Options);
 
+
             for (int i = 0; i < checkBoxes.Length; i++)
             {
+
                 if (keyGen.WireOrder[i] == null)
                 {
                     checkBoxes[i].Text = "";
@@ -83,7 +99,10 @@ namespace KTaNE_Virus_type_shi
                 {
                     checkBoxes[i].Text = "=========";
                     checkBoxes[i].ForeColor = Color.FromName(keyGen.WireOrder[i]);
+                    checkBoxes[i].Tag = i;
+                    checkBoxes[i].CheckedChanged += Wire_CheckedChanged;
                 }
+
 
             }
 
@@ -98,6 +117,8 @@ namespace KTaNE_Virus_type_shi
             Debug.WriteLine(string.Join(", ", keyGen.WireOrder));
 
             Debug.WriteLine(keyGen.CorrectWire);
+
+
         }
 
 
@@ -118,6 +139,7 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         private void button3_Click(object sender, EventArgs e)
         {
             string answerCapcha = textBox1.Text.ToLower();
@@ -130,6 +152,7 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         private void button4_Click(object sender, EventArgs e)
         {
             if (checkBoxes[keyGen.CorrectWire].Checked)
@@ -137,7 +160,27 @@ namespace KTaNE_Virus_type_shi
                 progressBar1.Value += 20;
                 button4.Enabled = false;
                 button4.BackColor = Color.Green;
+                checkBoxes[keyGen.CorrectWire].Text = "====   ====";
+            }
+            else
+            {
+                checkBoxes[index].Text = "====   ====";
             }
         }
+
+
+        private void Wire_CheckedChanged(object? sender, EventArgs e)
+        {
+            CheckBox wire = (CheckBox)sender!;
+
+            index = (int)wire.Tag;
+
+            if (wire.Checked)
+            {
+                Debug.WriteLine($"Wire {index} was selected");
+            }
+        }
+
+
     }
 }

@@ -65,7 +65,7 @@ namespace KTaNE_Virus_type_shi
 
         public List<string>? WireOrder { get; private set; } = new();
 
-        public int CorrectWire { get; private set; }
+        public int CorrectWire { get; private set; } = -1;
 
 
 
@@ -111,7 +111,7 @@ namespace KTaNE_Virus_type_shi
             {
                 WireOrder[rng.Next(WireOrder.Count)] = null;
             }
-            while(CorrectWire == null)
+            while(CorrectWire == -1)
             {
                 int candidate = rng.Next(WireOrder.Count);
                 if ( !string.IsNullOrEmpty(WireOrder[candidate]) )

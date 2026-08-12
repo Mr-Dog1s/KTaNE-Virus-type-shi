@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             monthCalendar1 = new MonthCalendar();
             dateTimePicker1 = new DateTimePicker();
             progressBar1 = new ProgressBar();
@@ -49,6 +50,12 @@
             radioButton2 = new RadioButton();
             button5 = new Button();
             label1 = new Label();
+            labelToolTip3 = new Label();
+            labelToolTip4 = new Label();
+            labelToolTip2 = new Label();
+            labelToolTip1 = new Label();
+            labelToolTip5 = new Label();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -84,7 +91,7 @@
             // 
             button1.Location = new Point(619, 286);
             button1.Name = "button1";
-            button1.Size = new Size(164, 23);
+            button1.Size = new Size(146, 23);
             button1.TabIndex = 4;
             button1.Text = "button1";
             button1.UseVisualStyleBackColor = true;
@@ -93,7 +100,7 @@
             // 
             button2.Location = new Point(11, 286);
             button2.Name = "button2";
-            button2.Size = new Size(130, 23);
+            button2.Size = new Size(120, 23);
             button2.TabIndex = 5;
             button2.Text = "Submit";
             button2.UseVisualStyleBackColor = true;
@@ -110,7 +117,7 @@
             // 
             button3.Location = new Point(190, 286);
             button3.Name = "button3";
-            button3.Size = new Size(145, 23);
+            button3.Size = new Size(131, 23);
             button3.TabIndex = 7;
             button3.Text = "Submit";
             button3.UseVisualStyleBackColor = true;
@@ -198,7 +205,7 @@
             // 
             button4.Location = new Point(381, 286);
             button4.Name = "button4";
-            button4.Size = new Size(82, 23);
+            button4.Size = new Size(79, 23);
             button4.TabIndex = 16;
             button4.Text = "Cut";
             button4.UseVisualStyleBackColor = true;
@@ -207,7 +214,7 @@
             // radioButton1
             // 
             radioButton1.AutoSize = true;
-            radioButton1.Location = new Point(497, 132);
+            radioButton1.Location = new Point(521, 132);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new Size(42, 19);
             radioButton1.TabIndex = 17;
@@ -218,7 +225,7 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new Point(497, 182);
+            radioButton2.Location = new Point(522, 182);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new Size(41, 19);
             radioButton2.TabIndex = 18;
@@ -230,7 +237,7 @@
             // 
             button5.Location = new Point(506, 286);
             button5.Name = "button5";
-            button5.Size = new Size(75, 23);
+            button5.Size = new Size(57, 23);
             button5.TabIndex = 19;
             button5.Text = "Submit";
             button5.UseVisualStyleBackColor = true;
@@ -247,11 +254,66 @@
             label1.Text = "0:00";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
+            // labelToolTip3
+            // 
+            labelToolTip3.AutoSize = true;
+            labelToolTip3.BackColor = SystemColors.ButtonShadow;
+            labelToolTip3.Location = new Point(466, 290);
+            labelToolTip3.Name = "labelToolTip3";
+            labelToolTip3.Size = new Size(12, 15);
+            labelToolTip3.TabIndex = 21;
+            labelToolTip3.Text = "?";
+            // 
+            // labelToolTip4
+            // 
+            labelToolTip4.AutoSize = true;
+            labelToolTip4.BackColor = SystemColors.ButtonShadow;
+            labelToolTip4.Location = new Point(569, 290);
+            labelToolTip4.Name = "labelToolTip4";
+            labelToolTip4.Size = new Size(12, 15);
+            labelToolTip4.TabIndex = 22;
+            labelToolTip4.Text = "?";
+            // 
+            // labelToolTip2
+            // 
+            labelToolTip2.AutoSize = true;
+            labelToolTip2.BackColor = SystemColors.ButtonShadow;
+            labelToolTip2.Location = new Point(327, 290);
+            labelToolTip2.Name = "labelToolTip2";
+            labelToolTip2.Size = new Size(12, 15);
+            labelToolTip2.TabIndex = 23;
+            labelToolTip2.Text = "?";
+            // 
+            // labelToolTip1
+            // 
+            labelToolTip1.AutoSize = true;
+            labelToolTip1.BackColor = SystemColors.ButtonShadow;
+            labelToolTip1.Location = new Point(137, 290);
+            labelToolTip1.Name = "labelToolTip1";
+            labelToolTip1.Size = new Size(12, 15);
+            labelToolTip1.TabIndex = 24;
+            labelToolTip1.Text = "?";
+            // 
+            // labelToolTip5
+            // 
+            labelToolTip5.AutoSize = true;
+            labelToolTip5.BackColor = SystemColors.ButtonShadow;
+            labelToolTip5.Location = new Point(771, 290);
+            labelToolTip5.Name = "labelToolTip5";
+            labelToolTip5.Size = new Size(12, 15);
+            labelToolTip5.TabIndex = 25;
+            labelToolTip5.Text = "?";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(795, 362);
+            Controls.Add(labelToolTip5);
+            Controls.Add(labelToolTip1);
+            Controls.Add(labelToolTip2);
+            Controls.Add(labelToolTip4);
+            Controls.Add(labelToolTip3);
             Controls.Add(label1);
             Controls.Add(button5);
             Controls.Add(radioButton2);
@@ -303,5 +365,11 @@
         private RadioButton radioButton2;
         private Button button5;
         private Label label1;
+        private Label labelToolTip3;
+        private Label labelToolTip4;
+        private Label labelToolTip2;
+        private Label labelToolTip1;
+        private Label labelToolTip5;
+        private ToolTip toolTip1;
     }
 }
