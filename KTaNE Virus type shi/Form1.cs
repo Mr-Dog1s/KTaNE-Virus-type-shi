@@ -11,6 +11,7 @@ namespace KTaNE_Virus_type_shi
 
 
 
+
         public Form1()
         {
             MessageBox.Show("Im a very stronk virus, you have around 5 minutes to defuse the bomb " +
@@ -24,7 +25,7 @@ namespace KTaNE_Virus_type_shi
                 MessageBoxButtons.OK
                 );
 
-            
+
 
             InitializeComponent();
 
@@ -42,25 +43,45 @@ namespace KTaNE_Virus_type_shi
             };
 
             timerHandler.Start();
-            //new InstructionGen();
+            
             keyGen.GenerateOddOne();
+
+            string ImagePath = keyGen.GenerateCapcha();
+            Debug.WriteLine(ImagePath);
+            pictureBox1.Image = Image.FromFile(ImagePath);
+            //new InstructionGen();
+
 
             checkedListBox1.Items.AddRange(keyGen.Options);
 
-            Debug.WriteLine(string.Join(", ", keyGen.CorrectAnswers));
+            Debug.WriteLine(string.Join(", ", keyGen.OddCorrectAnswers));
+
+            Debug.WriteLine(keyGen.CapchaKey);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            bool key1 = checkedListBox1.CheckedIndices.Contains(keyGen.CorrectAnswers[0]);
-            bool key2 = checkedListBox1.CheckedIndices.Contains(keyGen.CorrectAnswers[1]);
+            bool key1 = checkedListBox1.CheckedIndices.Contains(keyGen.OddCorrectAnswers[0]);
+            bool key2 = checkedListBox1.CheckedIndices.Contains(keyGen.OddCorrectAnswers[1]);
 
             if (key1 && key2)
             {
-                progressBar1.Value = 20;
+                progressBar1.Value += 20;
                 button2.Enabled = false;
                 button2.BackColor = Color.Green;
                 checkedListBox1.Enabled = false;
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string answerCapcha = textBox1.Text.ToLower();
+            Debug.WriteLine(answerCapcha);
+            if(answerCapcha == keyGen.CapchaKey)
+            {
+                progressBar1.Value += 20;
+                button3.Enabled = false;
+                button3.BackColor = Color.Green;
             }
         }
     }

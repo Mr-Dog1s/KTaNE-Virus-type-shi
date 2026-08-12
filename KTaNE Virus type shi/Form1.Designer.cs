@@ -112,8 +112,9 @@
             button3.Name = "button3";
             button3.Size = new Size(145, 23);
             button3.TabIndex = 7;
-            button3.Text = "button3";
+            button3.Text = "Submit";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // pictureBox1
             // 

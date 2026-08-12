@@ -11,6 +11,25 @@ namespace KTaNE_Virus_type_shi
     {
         Random rng = new Random();
 
+        private readonly string[] capchasList =
+        {
+            "capcha1.png",
+            "capcha2.png",
+            "capcha3.png",
+            "capcha4.png",
+            "capcha6.png"
+        };
+
+        private readonly string[] capchaKeys =
+        {
+            "bananabread",
+            "garlic",
+            "pornhub",
+            "hubabuba",
+            "cia gangstalking"
+        };
+
+
         public string[] OddPuzzle =
         {
             "Creamy Peanut Butter",
@@ -25,7 +44,11 @@ namespace KTaNE_Virus_type_shi
 
         public string[] Options { get; private set; } = Array.Empty<string>();
 
-        public int[] CorrectAnswers { get; private set; } = Array.Empty<int>();
+        public int[] OddCorrectAnswers { get; private set; } = Array.Empty<int>();
+
+        public int SelectedCapcha {  get; private set; }
+
+        public string CapchaKey { get; private set; }
 
 
         public void GenerateOddOne()
@@ -42,8 +65,20 @@ namespace KTaNE_Virus_type_shi
             }
             while (first == second);
 
-            CorrectAnswers = new[] { first, second };
+            OddCorrectAnswers = new[] { first, second };
             
+        }
+
+        public string GenerateCapcha()
+        {
+            SelectedCapcha = rng.Next(capchasList.Length);
+
+            CapchaKey = capchaKeys[SelectedCapcha];
+
+            return Path.Combine(
+                AppContext.BaseDirectory, "Assets",
+                capchasList[SelectedCapcha] 
+                );
         }
 
     }
