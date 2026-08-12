@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Drawing.Text;
+using System.Drawing;
 using static KTaNE_Virus_type_shi.InstructionGen;
 
 namespace KTaNE_Virus_type_shi
@@ -9,8 +11,7 @@ namespace KTaNE_Virus_type_shi
 
         private readonly KeyGen keyGen = new();
 
-
-
+        private readonly CheckBox[] checkBoxes;
 
         public Form1()
         {
@@ -26,8 +27,21 @@ namespace KTaNE_Virus_type_shi
                 );
 
 
+            //----------------------------------------------- Inits -----------------------------------------------\\
+
 
             InitializeComponent();
+
+            checkBoxes =
+                [
+                    checkBox1,
+                    checkBox2,
+                    checkBox3,
+                    checkBox4,
+                    checkBox5,
+                    checkBox6,
+                    checkBox7
+                ];
 
             progressBar1.Minimum = 0;
 
@@ -43,21 +57,52 @@ namespace KTaNE_Virus_type_shi
             };
 
             timerHandler.Start();
-            
+
             keyGen.GenerateOddOne();
 
+            keyGen.WiresGenerator();
+
             string ImagePath = keyGen.GenerateCapcha();
+
             Debug.WriteLine(ImagePath);
+
             pictureBox1.Image = Image.FromFile(ImagePath);
+
             //new InstructionGen();
 
-
             checkedListBox1.Items.AddRange(keyGen.Options);
+
+            for (int i = 0; i < checkBoxes.Length; i++)
+            {
+                if (keyGen.WireOrder[i] == null)
+                {
+                    checkBoxes[i].Text = "";
+                    checkBoxes[i].Enabled = false;
+                }
+                else
+                {
+                    checkBoxes[i].Text = "=========";
+                    checkBoxes[i].ForeColor = Color.FromName(keyGen.WireOrder[i]);
+                }
+
+            }
+
+
+            //----------------------------------------------- Debug -----------------------------------------------\\
+
 
             Debug.WriteLine(string.Join(", ", keyGen.OddCorrectAnswers));
 
             Debug.WriteLine(keyGen.CapchaKey);
+
+            Debug.WriteLine(string.Join(", ", keyGen.WireOrder));
+
+            Debug.WriteLine(keyGen.CorrectWire);
         }
+
+
+        //---------------------------------------------- Compts -----------------------------------------------\\
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -77,11 +122,21 @@ namespace KTaNE_Virus_type_shi
         {
             string answerCapcha = textBox1.Text.ToLower();
             Debug.WriteLine(answerCapcha);
-            if(answerCapcha == keyGen.CapchaKey)
+            if (answerCapcha == keyGen.CapchaKey)
             {
                 progressBar1.Value += 20;
                 button3.Enabled = false;
                 button3.BackColor = Color.Green;
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (checkBoxes[keyGen.CorrectWire].Checked)
+            {
+                progressBar1.Value += 20;
+                button4.Enabled = false;
+                button4.BackColor = Color.Green;
             }
         }
     }

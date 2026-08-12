@@ -42,13 +42,31 @@ namespace KTaNE_Virus_type_shi
             "Popcorn"
         };
 
+        public List<string> Wires = new()
+        {
+            "red",
+            "blue",
+            "green",
+            "yellow",
+            "purple",
+            "black",
+            "brown"
+        };
+
+
+
         public string[] Options { get; private set; } = Array.Empty<string>();
 
         public int[] OddCorrectAnswers { get; private set; } = Array.Empty<int>();
 
         public int SelectedCapcha {  get; private set; }
 
-        public string CapchaKey { get; private set; }
+        public string? CapchaKey { get; private set; }
+
+        public List<string>? WireOrder { get; private set; } = new();
+
+        public int CorrectWire { get; private set; }
+
 
 
         public void GenerateOddOne()
@@ -79,6 +97,28 @@ namespace KTaNE_Virus_type_shi
                 AppContext.BaseDirectory, "Assets",
                 capchasList[SelectedCapcha] 
                 );
+        }
+
+        public void WiresGenerator()
+        {
+            for ( int i = 0; i < 7; i++ )
+            {
+                int selected = rng.Next( Wires.Count);
+                WireOrder.Add( Wires[selected] );
+                Wires.RemoveAt(selected);
+            }
+            for (int i = 0; i < 2; i++ )
+            {
+                WireOrder[rng.Next(WireOrder.Count)] = null;
+            }
+            while(CorrectWire == null)
+            {
+                int candidate = rng.Next(WireOrder.Count);
+                if ( !string.IsNullOrEmpty(WireOrder[candidate]) )
+                {
+                    CorrectWire = candidate;
+                }
+            }
         }
 
     }
