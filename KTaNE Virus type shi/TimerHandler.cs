@@ -11,7 +11,7 @@ namespace KTaNE_Virus_type_shi
 
         private readonly Timer timer = new Timer();
         private int secondsLeft;
-        private int startingSeconds = 300;
+        private int startingSeconds = 3000;
 
         public event Action<int>? TimeChanged;
         public event Action? TimerFinished;

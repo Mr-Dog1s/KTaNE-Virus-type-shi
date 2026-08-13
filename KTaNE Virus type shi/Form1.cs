@@ -14,9 +14,9 @@ namespace KTaNE_Virus_type_shi
 
         private readonly CheckBox[] checkBoxes;
 
-        public RadioButton? selected;
-
         public int index;
+
+        private WatchDogClient watchDog = new WatchDogClient();
 
         public Form1()
         {
@@ -36,6 +36,12 @@ namespace KTaNE_Virus_type_shi
 
 
             InitializeComponent();
+
+            //this.FormBorderStyle = FormBorderStyle.None;
+
+            WatchDogStartup();
+
+            _ = ConnectWatchDogAsync();
 
             checkBoxes =
                 [
@@ -134,6 +140,8 @@ namespace KTaNE_Virus_type_shi
         }
 
 
+
+
         //---------------------------------------------- Compts -----------------------------------------------\\
 
 
@@ -214,6 +222,7 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         private void button5_Click(object sender, EventArgs e)
         {
             if (radioButton1.Checked == keyGen.SimpleQuestion)
@@ -228,9 +237,10 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         private void button1_Click(object sender, EventArgs e)
         {
-            if(dateTimePicker1.Value.Date == keyGen.correctDate)
+            if (dateTimePicker1.Value.Date == keyGen.correctDate)
             {
 
                 progressBar1.Value += 20;
@@ -242,6 +252,44 @@ namespace KTaNE_Virus_type_shi
                 dateTimePicker1.Enabled = false;
 
             }
+        }
+
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == (Keys.Alt | Keys.F4))
+            {
+                MessageBox.Show("You really thought this would work, didnt you?", "Seriously?");
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+
+        private void WatchDogStartup()
+        {
+            string watchdogPath = @"C:\\Users\\scher\\source\\repos\\KTaNE Virus type shi\\KTaNEWatchDog\\bin\\Debug\\net10.0\\KTaNEWatchDog.exe";
+
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = watchdogPath,
+
+                Arguments = Environment.ProcessId.ToString(),
+                UseShellExecute = false
+            });
+        }
+
+
+        private async Task ConnectWatchDogAsync()
+        {
+            await watchDog.ConnectAsync();
+            watchDog.HeartBeat();
+        }
+
+        private async void button6_Click(object sender, EventArgs e)
+        {
+            await watchDog.SendMessageAsync("SHUTDOWN_APPROVED");
         }
     }
 }

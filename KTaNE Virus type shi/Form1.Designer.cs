@@ -56,6 +56,7 @@
             labelToolTip1 = new Label();
             labelToolTip5 = new Label();
             toolTip1 = new ToolTip(components);
+            button6 = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -306,11 +307,22 @@
             labelToolTip5.TabIndex = 25;
             labelToolTip5.Text = "?";
             // 
+            // button6
+            // 
+            button6.Location = new Point(546, 45);
+            button6.Name = "button6";
+            button6.Size = new Size(75, 23);
+            button6.TabIndex = 26;
+            button6.Text = "button6";
+            button6.UseVisualStyleBackColor = true;
+            button6.Click += button6_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(795, 362);
+            Controls.Add(button6);
             Controls.Add(labelToolTip5);
             Controls.Add(labelToolTip1);
             Controls.Add(labelToolTip2);
@@ -337,8 +349,11 @@
             Controls.Add(progressBar1);
             Controls.Add(dateTimePicker1);
             Controls.Add(monthCalendar1);
+            MinimizeBox = false;
             Name = "Form1";
+            ShowInTaskbar = false;
             Text = "Form1";
+            TopMost = true;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -373,5 +388,6 @@
         private Label labelToolTip1;
         private Label labelToolTip5;
         private ToolTip toolTip1;
+        private Button button6;
     }
 }
