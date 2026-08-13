@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Drawing.Text;
 using System.Drawing;
 using static KTaNE_Virus_type_shi.InstructionGen;
+using System.Windows.Forms.VisualStyles;
 
 namespace KTaNE_Virus_type_shi
 {
@@ -12,6 +13,8 @@ namespace KTaNE_Virus_type_shi
         private readonly KeyGen keyGen = new();
 
         private readonly CheckBox[] checkBoxes;
+
+        public RadioButton? selected;
 
         public int index;
 
@@ -45,7 +48,6 @@ namespace KTaNE_Virus_type_shi
                     checkBox7
                 ];
 
-
             toolTip1.SetToolTip(labelToolTip1, "Elite ball knowledge correlation, but two are not related, maybe");
 
             toolTip1.SetToolTip(labelToolTip2, "Simple CAPCHA, find what you gotta look for");
@@ -54,8 +56,7 @@ namespace KTaNE_Virus_type_shi
 
             toolTip1.SetToolTip(labelToolTip4, "One question, obvious really, but what is it?");
 
-            toolTip1.SetToolTip(labelToolTip5, "Hope you good with dates, twin");
-
+            toolTip1.SetToolTip(labelToolTip5, "Hope you were good with history, twin");
 
             progressBar1.Minimum = 0;
 
@@ -76,6 +77,8 @@ namespace KTaNE_Virus_type_shi
 
             keyGen.WiresGenerator();
 
+            keyGen.DateGenerator();
+
             string ImagePath = keyGen.GenerateCapcha();
 
             Debug.WriteLine(ImagePath);
@@ -92,14 +95,21 @@ namespace KTaNE_Virus_type_shi
 
                 if (keyGen.WireOrder[i] == null)
                 {
+
                     checkBoxes[i].Text = "";
+
                     checkBoxes[i].Enabled = false;
+
                 }
                 else
                 {
+
                     checkBoxes[i].Text = "=========";
+
                     checkBoxes[i].ForeColor = Color.FromName(keyGen.WireOrder[i]);
+
                     checkBoxes[i].Tag = i;
+
                     checkBoxes[i].CheckedChanged += Wire_CheckedChanged;
                 }
 
@@ -118,6 +128,8 @@ namespace KTaNE_Virus_type_shi
 
             Debug.WriteLine(keyGen.CorrectWire);
 
+            Debug.WriteLine(keyGen.correctDate);
+
 
         }
 
@@ -127,15 +139,22 @@ namespace KTaNE_Virus_type_shi
 
         private void button2_Click(object sender, EventArgs e)
         {
+
             bool key1 = checkedListBox1.CheckedIndices.Contains(keyGen.OddCorrectAnswers[0]);
+
             bool key2 = checkedListBox1.CheckedIndices.Contains(keyGen.OddCorrectAnswers[1]);
 
             if (key1 && key2)
             {
+
                 progressBar1.Value += 20;
+
                 button2.Enabled = false;
+
                 button2.BackColor = Color.Green;
+
                 checkedListBox1.Enabled = false;
+
             }
         }
 
@@ -143,12 +162,16 @@ namespace KTaNE_Virus_type_shi
         private void button3_Click(object sender, EventArgs e)
         {
             string answerCapcha = textBox1.Text.ToLower();
-            Debug.WriteLine(answerCapcha);
+
             if (answerCapcha == keyGen.CapchaKey)
             {
+
                 progressBar1.Value += 20;
+
                 button3.Enabled = false;
+
                 button3.BackColor = Color.Green;
+
             }
         }
 
@@ -157,10 +180,20 @@ namespace KTaNE_Virus_type_shi
         {
             if (checkBoxes[keyGen.CorrectWire].Checked)
             {
+
                 progressBar1.Value += 20;
+
                 button4.Enabled = false;
+
                 button4.BackColor = Color.Green;
+
                 checkBoxes[keyGen.CorrectWire].Text = "====   ====";
+
+                foreach (CheckBox checkBox in checkBoxes)
+                {
+                    checkBox.Enabled = false;
+                }
+
             }
             else
             {
@@ -181,6 +214,34 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+            if (radioButton1.Checked == keyGen.SimpleQuestion)
+            {
 
+                progressBar1.Value += 20;
+
+                button5.Enabled = false;
+
+                button5.BackColor = Color.Green;
+
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(dateTimePicker1.Value.Date == keyGen.correctDate)
+            {
+
+                progressBar1.Value += 20;
+
+                button1.Enabled = false;
+
+                button1.BackColor = Color.Green;
+
+                dateTimePicker1.Enabled = false;
+
+            }
+        }
     }
 }

@@ -67,6 +67,18 @@ namespace KTaNE_Virus_type_shi
 
         public int CorrectWire { get; private set; } = -1;
 
+        public bool SimpleQuestion { get; private set; } = true;
+
+        public DateTime correctDate { get; private set; }
+
+        private readonly List<(DateTime Date, string Clue)> Dates = new()
+        {
+            (new DateTime(1889, 4, 20),"One artistic man heard 'BLAZE IT' and did so literaly, when he was born tho?"),
+            (new DateTime(1953, 3, 5), "GULAG? Never happened, oh shi? i got a stroke call the doctor.....ah.... they are all jews"),
+            (new DateTime(2001, 9, 11), "Turning page of history, and it had George Bush present, but which George?"),
+            (new DateTime(1773, 12, 16), "Largest tea-party in history that made Brits very angry"),
+            (new  DateTime(1986, 4, 26),"Was politburo retarded? Probably, but this was the last retarded moment resulting in 3 being replaced with 15.000 ")
+        };
 
 
         public void GenerateOddOne()
@@ -101,25 +113,30 @@ namespace KTaNE_Virus_type_shi
 
         public void WiresGenerator()
         {
-            for ( int i = 0; i < 7; i++ )
+            for (int i = 0; i < 7; i++)
             {
-                int selected = rng.Next( Wires.Count);
-                WireOrder.Add( Wires[selected] );
+                int selected = rng.Next(Wires.Count);
+                WireOrder.Add(Wires[selected]);
                 Wires.RemoveAt(selected);
             }
-            for (int i = 0; i < 2; i++ )
+            for (int i = 0; i < 2; i++)
             {
                 WireOrder[rng.Next(WireOrder.Count)] = null;
             }
-            while(CorrectWire == -1)
+            while (CorrectWire == -1)
             {
                 int candidate = rng.Next(WireOrder.Count);
-                if ( !string.IsNullOrEmpty(WireOrder[candidate]) )
+                if (!string.IsNullOrEmpty(WireOrder[candidate]))
                 {
                     CorrectWire = candidate;
                 }
             }
         }
 
+        public void DateGenerator()
+        {
+            int selected = rng.Next(Dates.Count);
+            correctDate = Dates[selected].Date;
+        }
     }
 }
