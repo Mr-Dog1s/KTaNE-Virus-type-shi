@@ -125,14 +125,27 @@ Task ECGListener = Task.Run(() =>
 
 
 Task watchDogMonitor = Task.Run(async () => 
-{ 
-    await Task.Delay(1000);
-
-    TimeSpan sinceHeartBeat = DateTime.UtcNow - lastHeartbeat;
-
-    if(sinceHeartBeat.TotalSeconds > 3)
+{
+    while (true)
     {
-        Console.WriteLine("ARRHYTMIA DETECTED");
+        await Task.Delay(1000);
+
+        TimeSpan sinceHeartBeat =
+            DateTime.UtcNow - lastHeartbeat;
+
+        Console.WriteLine(
+            $"Heartbeat age: {sinceHeartBeat.TotalSeconds:F1}s"
+        );
+
+        if (sinceHeartBeat.TotalSeconds > 3)
+        {
+            Console.WriteLine("ARRHYTMIA DETECTED");
+        }
+
+        if (bomb.HasExited)
+        {
+            break;
+        }
     }
 });
 
