@@ -4,6 +4,7 @@ using System.Text;
 using System.IO.Pipes;
 using System.Security.Permissions;
 using System.Diagnostics;
+using System.Security.Policy;
 
 namespace KTaNE_Virus_type_shi
 {
@@ -66,6 +67,7 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         public async Task SendMessageAsync(string message)
         {
             if (writer == null)
@@ -88,6 +90,26 @@ namespace KTaNE_Virus_type_shi
                     $"WATCHDOG SEND FAILED: {ex}"
                 );
             }
+        }
+
+
+        public async Task DeadMansSwitchSafety(bool DMSSafetySwitch)
+        {
+
+                try
+                {
+                    string message = "DMS_Armed";
+
+                    if (DMSSafetySwitch)
+                    {
+                        await SendMessageAsync(message);
+                        Console.WriteLine("DMS-ARMED");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"DMS-Armament failed: {ex}");
+                }
         }
 
         public void HeartBeat()
@@ -118,10 +140,12 @@ namespace KTaNE_Virus_type_shi
             });
         }
 
+
         public void FlatLine()
         {
             heartBeatCts?.Cancel();
         }
+
 
         public async Task ListenAsync()
         {

@@ -16,10 +16,28 @@ namespace KTaNE_Virus_type_shi
 
         public int index;
 
+        public bool DMSSafetySwitch { get; private set; } = false;
+
         private WatchDogClient watchDog = new WatchDogClient();
 
         public Form1()
         {
+
+            DialogResult dialogResult = MessageBox.Show("CAUTION! \n " +
+                "Read carefully! This is selection of difficulty mode! \n " +
+                "While this software is purely recreational piece of loosely packed text that does " +
+                "magic and is NOT malicious in any way, if you press YES right now, this may impact your stuff a bit, " +
+                "since in this case the failure will result in OS Shutdown and may result in premature termination of " +
+                "all currently run applications, which by coincidence may cause you to lose all unsaved progress.\n" +
+                "With that being said, if you wish to purely look around or tamper a bit with the app itself, PLEASE PRESS NO.\n" +
+                "Otherwise if you just wish to play high-stake game, press yes, but beware, it may or may not shutdown your pc prematurely if error occures\n" +
+                "YOU HAVE BEEN WARNED", "CAUTION", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+            if(dialogResult == DialogResult.Yes)
+            {
+                DMSSafetySwitch = true;
+            }
+
+
             MessageBox.Show("Im a very stronk virus, you have around 5 minutes to defuse the bomb " +
                 "and you have to defuse me or you will get your lil PC shut down, " +
                 "though without any consequences. Instructions are scattered around your C:// " +
@@ -37,11 +55,13 @@ namespace KTaNE_Virus_type_shi
 
             InitializeComponent();
 
-            //this.FormBorderStyle = FormBorderStyle.None;
+            this.FormBorderStyle = FormBorderStyle.None;
 
             WatchDogStartup();
 
             _ = ConnectWatchDogAsync();
+
+            
 
             checkBoxes =
                 [
@@ -284,10 +304,12 @@ namespace KTaNE_Virus_type_shi
         private async Task ConnectWatchDogAsync()
         {
             await watchDog.ConnectAsync();
+            await watchDog.DeadMansSwitchSafety(DMSSafetySwitch);
             watchDog.HeartBeat();
             _ = watchDog.ListenAsync();
             watchDog.WatchdogECG();
         }
+
 
         private async void button6_Click(object sender, EventArgs e)
         {
@@ -295,5 +317,7 @@ namespace KTaNE_Virus_type_shi
             await watchDog.SendMessageAsync(message);
             watchDog.FlatLine();
         }
+
+
     }
 }

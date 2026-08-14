@@ -5,6 +5,8 @@ using System.Text;
 
 bool ShutdownHandshake = false;
 
+bool DeadMansSwitchArmed = false;
+
 DateTime lastHeartbeat = DateTime.UtcNow;
 
 
@@ -105,6 +107,12 @@ Task ECGListener = Task.Run(async () =>
             break;
         }
 
+        if(message == "DMS_Armed")
+        {
+            Console.WriteLine("DMS ARMED, CONFIRMED");
+            DeadMansSwitchArmed = true;
+        }
+
         Console.WriteLine($"RECEIVED: {message}");
 
         if (message == "NOMINAL")
@@ -192,15 +200,17 @@ await processMonitor;
 if (ShutdownHandshake)
 {
     Console.WriteLine("System approved shutdown");
+    
 }
 else
 {
-    //Console.WriteLine("Unauthorized termination");
-    //Task.Delay(2000);
-    //Console.WriteLine("DEAD-MANS-SWITCH-ACTIVATED");
-    //Console.WriteLine("TERMINATING SESSION");
-    //Task.Delay (1000);
+    Console.WriteLine("Unauthorized termination");
+    Thread.Sleep(2000);
+    Console.WriteLine("DEAD-MAN-SWITCH ACTIVATED");
+    Thread.Sleep(2000);
+    Console.WriteLine("TERMINATING USER");
     
+    Console.WriteLine($"DMS arm status: {DeadMansSwitchArmed}");
 }
 
 
