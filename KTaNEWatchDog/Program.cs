@@ -11,23 +11,23 @@ DateTime lastHeartbeat = DateTime.UtcNow;
 //--------------------------------------------
 
 
-Console.WriteLine("WATCHDOG STARTED");
+Console.WriteLine("WATCHDOG STARTED\n");
 
 if (args.Length == 0)
 {
-    Console.WriteLine("NO PID RECEIVED");
+    Console.WriteLine("NO PID RECEIVED\n");
     Console.ReadLine();
     return;
 }
 
 if (!int.TryParse(args[0], out int bombPid))
 {
-    Console.WriteLine("INVALID PID");
+    Console.WriteLine("INVALID PID\n");
     Console.ReadLine();
     return;
 }
 
-Console.WriteLine($"PID received: {bombPid}");
+Console.WriteLine($"PID received: {bombPid}\n");
 
 
 //--------------------------------------------
@@ -41,13 +41,13 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"FAILED TO FIND BOMB: {ex.Message}");
+    Console.WriteLine($"FAILED TO FIND BOMB: {ex.Message}\n");
     Console.ReadLine();
     return;
 }
 
-Console.WriteLine($"Found Bomb: {bomb.ProcessName}");
-Console.WriteLine("Creating pipe...");
+Console.WriteLine($"Found Bomb: {bomb.ProcessName}\n");
+Console.WriteLine("Creating pipe...\n");
 
 
 //--------------------------------------------
@@ -58,12 +58,23 @@ using var pipe = new NamedPipeServerStream(
     PipeDirection.In
 );
 
-Console.WriteLine("Pipe created.");
-Console.WriteLine("Waiting for Bomb connection...");
+Console.WriteLine("Pipe created.\n");
+Console.WriteLine("Waiting for Bomb connection...\n");
 
 pipe.WaitForConnection();
 
-Console.WriteLine("BOMB CONNECTED!");
+Console.WriteLine("BOMB CONNECTED!\n");
+
+using var watchdogPipe = new NamedPipeServerStream(
+    "KTaNE_Watchdog",
+    PipeDirection.Out
+);
+
+Console.WriteLine("Waiting for Bomb watchdog connection...");
+
+watchdogPipe.WaitForConnection();
+
+Console.WriteLine("Watchdog output pipe connected!");
 
 
 //--------------------------------------------
@@ -73,49 +84,37 @@ Task processMonitor = Task.Run(() =>
 {
     bomb.WaitForExit();
 
-    Console.WriteLine("Bomb process terminated");
+    Console.WriteLine("Bomb process terminated\n");
 });
 
 
 //--------------------------------------------
 
 
-Task ECGListener = Task.Run(() =>
-{
-    byte[] buffer = new byte[1024];
+using StreamReader reader = new StreamReader(pipe);
 
+Task ECGListener = Task.Run(async () =>
+{
     while (true)
     {
-        int bytesRead = pipe.Read
-        (
-            buffer,
-            0,
-            buffer.Length
-        );
+        string? message = await reader.ReadLineAsync();
 
-        if( bytesRead == 0)
+        if (message == null)
         {
-            Console.WriteLine("Pipe connection terminated");
+            Console.WriteLine("BOMB CONNECTION TERMINATED");
             break;
         }
 
-        string message = Encoding.UTF8.GetString
-        (
-            buffer, 
-            0, 
-            bytesRead
-        );
+        Console.WriteLine($"RECEIVED: {message}");
 
-        Console.WriteLine(message);
-
-        if(message == "NOMINAL")
+        if (message == "NOMINAL")
         {
             lastHeartbeat = DateTime.UtcNow;
         }
         else if (message == "SHUTDOWN_APPROVED")
         {
             ShutdownHandshake = true;
-            Console.WriteLine("Shutdown handshake received");
+            Console.WriteLine("SHUTDOWN HANDSHAKE RECEIVED");
         }
     }
 });
@@ -139,11 +138,45 @@ Task watchDogMonitor = Task.Run(async () =>
 
         if (sinceHeartBeat.TotalSeconds > 3)
         {
-            Console.WriteLine("ARRHYTMIA DETECTED");
+            Console.WriteLine("ARRHYTMIA DETECTED\n");
         }
 
         if (bomb.HasExited)
         {
+            break;
+        }
+    }
+});
+
+
+//--------------------------------------------
+
+
+Task watchdogHeartbeat = Task.Run(async () =>
+{
+    using StreamWriter writer = new StreamWriter(watchdogPipe)
+    {
+        AutoFlush = true
+    };
+
+    while (true)
+    {
+        try
+        {
+            Console.WriteLine("Sending WATCHDOG_OPERATIONAL...");
+
+            await writer.WriteLineAsync("WATCHDOG_OPERATIONAL");
+
+            Console.WriteLine("WATCHDOG_OPERATIONAL sent.");
+
+            await Task.Delay(1000);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(
+                $"WATCHDOG HEARTBEAT FAILED: {ex}"
+            );
+
             break;
         }
     }
@@ -162,7 +195,12 @@ if (ShutdownHandshake)
 }
 else
 {
-    Console.WriteLine("Unauthorized termination");
+    //Console.WriteLine("Unauthorized termination");
+    //Task.Delay(2000);
+    //Console.WriteLine("DEAD-MANS-SWITCH-ACTIVATED");
+    //Console.WriteLine("TERMINATING SESSION");
+    //Task.Delay (1000);
+    
 }
 
 

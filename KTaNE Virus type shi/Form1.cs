@@ -285,11 +285,15 @@ namespace KTaNE_Virus_type_shi
         {
             await watchDog.ConnectAsync();
             watchDog.HeartBeat();
+            _ = watchDog.ListenAsync();
+            watchDog.WatchdogECG();
         }
 
         private async void button6_Click(object sender, EventArgs e)
         {
-            await watchDog.SendMessageAsync("SHUTDOWN_APPROVED");
+            string message = "SHUTDOWN_APPROVED\n";
+            await watchDog.SendMessageAsync(message);
+            watchDog.FlatLine();
         }
     }
 }

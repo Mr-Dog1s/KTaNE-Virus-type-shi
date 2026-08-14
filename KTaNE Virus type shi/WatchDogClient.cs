@@ -9,50 +9,85 @@ namespace KTaNE_Virus_type_shi
 {
     internal class WatchDogClient
     {
-        private NamedPipeClientStream? pipe;
 
         private CancellationTokenSource? heartBeatCts;
-            
+
+        private DateTime lastWatchdogHeartbeat = DateTime.UtcNow;
+
+        private NamedPipeClientStream? sendPipe;
+        private NamedPipeClientStream? receivePipe;
+
+        private StreamWriter? writer;
+        private StreamReader? reader;
+
+
         public async Task ConnectAsync()
         {
+            sendPipe = new NamedPipeClientStream(
+                ".",
+                "KTaNE_Bomb",
+                PipeDirection.Out
+            );
 
-            pipe = new NamedPipeClientStream
-                (
-                    ".",
-                    "KTaNE_bomb",
-                    PipeDirection.Out
-                );
+            receivePipe = new NamedPipeClientStream(
+                ".",
+                "KTaNE_Watchdog",
+                PipeDirection.In
+            );
+
             try
             {
-                Debug.WriteLine("Connecting to watchdog");
+                Debug.WriteLine("Connecting to watchdog...");
 
-                await pipe.ConnectAsync(5000);
+                await sendPipe.ConnectAsync(5000);
+                Debug.WriteLine("Bomb → Watchdog connected.");
 
-                Debug.WriteLine("Connected to WatchDog");
+                await receivePipe.ConnectAsync(5000);
+                Debug.WriteLine("Watchdog → Bomb connected.");
+
+                writer = new StreamWriter(sendPipe)
+                {
+                    AutoFlush = true
+                };
+
+                reader = new StreamReader(receivePipe);
+
+                Debug.WriteLine("Both watchdog pipes connected.");
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                Debug.WriteLine("WatchDog connection timeout");
+                Debug.WriteLine($"Watchdog connection failed: {ex}");
 
-                pipe.Dispose();
-                pipe = null;
+                sendPipe?.Dispose();
+                receivePipe?.Dispose();
+
+                sendPipe = null;
+                receivePipe = null;
             }
         }
 
         public async Task SendMessageAsync(string message)
         {
-            if(pipe == null || !pipe.IsConnected)
+            if (writer == null)
             {
-                Debug.WriteLine("Connection not established");
+                Debug.WriteLine("Watchdog connection not established.");
                 return;
             }
 
-            byte[] data = Encoding.UTF8.GetBytes(message);
+            try
+            {
+                await writer.WriteLineAsync(message);
 
-            await pipe.WriteAsync(data);
-            await pipe.FlushAsync();
-
-            Debug.WriteLine($"Sent to watchdog: {message}");
+                Debug.WriteLine(
+                    $"Sent to watchdog: {message}"
+                );
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(
+                    $"WATCHDOG SEND FAILED: {ex}"
+                );
+            }
         }
 
         public void HeartBeat()
@@ -65,7 +100,9 @@ namespace KTaNE_Virus_type_shi
                 {
                     try
                     {
-                        await SendMessageAsync("NOMINAL");
+                        string message = "NOMINAL\n";
+
+                        await SendMessageAsync(message);
 
                         await Task.Delay(1000, heartBeatCts.Token);
                     }
@@ -84,6 +121,59 @@ namespace KTaNE_Virus_type_shi
         public void FlatLine()
         {
             heartBeatCts?.Cancel();
+        }
+
+        public async Task ListenAsync()
+        {
+            if (reader == null)
+                return;
+
+            try
+            {
+                while (true)
+                {
+                    string? message = await reader.ReadLineAsync();
+
+                    if (message == null)
+                    {
+                        Debug.WriteLine("WATCHDOG_LOST");
+                        break;
+                    }
+
+                    if (message == "WATCHDOG_OPERATIONAL")
+                    {
+                        lastWatchdogHeartbeat = DateTime.UtcNow;
+
+                        Debug.WriteLine(
+                            $"WATCHDOG OPERATIONAL received at " +
+                            $"{lastWatchdogHeartbeat:HH:mm:ss.fff}"
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(
+                    $"WATCHDOG CONNECTION LOST: {ex}"
+                );
+            }
+        }
+
+        public void WatchdogECG()
+        {
+            _ = Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(1000);
+                    TimeSpan sinceWatchDogResponse =
+                        DateTime.UtcNow - lastWatchdogHeartbeat;
+                    if (sinceWatchDogResponse.TotalSeconds > 3)
+                    {
+                        Debug.WriteLine("WATCHDOG ARRHYTMIA DETECTED");
+                    }
+                }
+            });
         }
 
         
