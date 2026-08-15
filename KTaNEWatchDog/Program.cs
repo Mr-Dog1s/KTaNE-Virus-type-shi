@@ -206,11 +206,16 @@ else
 {
     Console.WriteLine("Unauthorized termination");
     Thread.Sleep(2000);
-    Console.WriteLine("DEAD-MAN-SWITCH ACTIVATED");
-    Thread.Sleep(2000);
-    Console.WriteLine("TERMINATING USER");
+    Console.WriteLine($"DMS Arming Status: {DeadMansSwitchArmed}");
+    if (DeadMansSwitchArmed)
+    {
+        Console.WriteLine("DEAD-MAN-SWITCH ACTIVATED");
+        Thread.Sleep(2000);
+        Console.WriteLine("TERMINATING USER");
+    }
     
-    Console.WriteLine($"DMS arm status: {DeadMansSwitchArmed}");
+    
+    
 }
 
 
