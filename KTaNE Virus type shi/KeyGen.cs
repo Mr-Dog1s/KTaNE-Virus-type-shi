@@ -20,7 +20,7 @@ namespace KTaNE_Virus_type_shi
             "capcha6.png"
         };
 
-        private readonly string[] capchaKeys =
+        public readonly string[] capchaKeys =
         {
             "bananabread",
             "garlic",
@@ -71,10 +71,12 @@ namespace KTaNE_Virus_type_shi
 
         public DateTime correctDate { get; private set; }
 
-        private readonly List<(DateTime Date, string Clue)> Dates = new()
+        public int correctDateIndex { get; private set; }
+
+        public readonly List<(DateTime Date, string Clue)> Dates = new()
         {
             (new DateTime(1889, 4, 20),"One artistic man heard 'BLAZE IT' and did so literaly, when he was born tho?"),
-            (new DateTime(1953, 3, 5), "GULAG? Never happened, oh shi? i got a stroke call the doctor.....ah.... they are all jews"),
+            (new DateTime(1953, 3, 5), "GULAG? Never happened. oh shi.... i got a stroke call the doctor.....ah.... they are all jews"),
             (new DateTime(2001, 9, 11), "Turning page of history, and it had George Bush present, but which George?"),
             (new DateTime(1773, 12, 16), "Largest tea-party in history that made Brits very angry"),
             (new  DateTime(1986, 4, 26),"Was politburo retarded? Probably, but this was the last retarded moment resulting in 3 being replaced with 15.000 ")
@@ -99,6 +101,7 @@ namespace KTaNE_Virus_type_shi
             
         }
 
+
         public string GenerateCapcha()
         {
             SelectedCapcha = rng.Next(capchasList.Length);
@@ -110,6 +113,7 @@ namespace KTaNE_Virus_type_shi
                 capchasList[SelectedCapcha] 
                 );
         }
+
 
         public void WiresGenerator()
         {
@@ -133,10 +137,14 @@ namespace KTaNE_Virus_type_shi
             }
         }
 
+
         public void DateGenerator()
         {
             int selected = rng.Next(Dates.Count);
+            correctDateIndex = selected;
             correctDate = Dates[selected].Date;
         }
+
+
     }
 }

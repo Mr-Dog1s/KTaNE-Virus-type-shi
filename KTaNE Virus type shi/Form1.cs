@@ -20,6 +20,8 @@ namespace KTaNE_Virus_type_shi
 
         private WatchDogClient watchDog = new WatchDogClient();
 
+        public string ImagePath { get; private set; }
+
         public Form1()
         {
 
@@ -105,13 +107,13 @@ namespace KTaNE_Virus_type_shi
 
             keyGen.DateGenerator();
 
-            string ImagePath = keyGen.GenerateCapcha();
+            ImagePath = keyGen.GenerateCapcha();
 
             Debug.WriteLine(ImagePath);
 
             pictureBox1.Image = Image.FromFile(ImagePath);
 
-            //new InstructionGen();
+            new InstructionGen();
 
             checkedListBox1.Items.AddRange(keyGen.Options);
 
