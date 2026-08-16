@@ -175,7 +175,7 @@ namespace KTaNE_Virus_type_shi
             if (key1 && key2)
             {
 
-                progressBar1.Value += 20;
+                UpdateProgress(20);
 
                 button2.Enabled = false;
 
@@ -194,7 +194,7 @@ namespace KTaNE_Virus_type_shi
             if (answerCapcha == keyGen.CapchaKey)
             {
 
-                progressBar1.Value += 20;
+                UpdateProgress(20);
 
                 button3.Enabled = false;
 
@@ -209,7 +209,7 @@ namespace KTaNE_Virus_type_shi
             if (checkBoxes[keyGen.CorrectWire].Checked)
             {
 
-                progressBar1.Value += 20;
+                UpdateProgress(20);
 
                 button4.Enabled = false;
 
@@ -248,7 +248,7 @@ namespace KTaNE_Virus_type_shi
             if (radioButton1.Checked == keyGen.SimpleQuestion)
             {
 
-                progressBar1.Value += 20;
+                UpdateProgress(100);
 
                 button5.Enabled = false;
 
@@ -263,7 +263,7 @@ namespace KTaNE_Virus_type_shi
             if (dateTimePicker1.Value.Date == keyGen.correctDate)
             {
 
-                progressBar1.Value += 20;
+                UpdateProgress(20);
 
                 button1.Enabled = false;
 
@@ -311,13 +311,27 @@ namespace KTaNE_Virus_type_shi
         }
 
 
-        private async void button6_Click(object sender, EventArgs e)
+        private async Task UpdateProgress(int progress)
         {
-            string message = "SHUTDOWN_APPROVED\n";
-            await watchDog.SendMessageAsync(message);
-            watchDog.FlatLine();
+            progressBar1.Value += progress;
+
+            if(progressBar1.Value == 100)
+            {
+                Console.WriteLine("Bomb Defused");
+                timerHandler.Stop();
+                await DefusalComplete();
+            }
         }
 
 
+        private async Task DefusalComplete()
+        {
+            await watchDog.SendMessageAsync("SHUTDOWN_APPROVED");
+
+            MessageBox.Show("Congrats, you have defused the bomb, the program will be terminated shortly");
+            Thread.Sleep(3000);
+
+            this.Close();
+        }
     }
 }

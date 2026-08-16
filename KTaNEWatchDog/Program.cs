@@ -97,7 +97,7 @@ using StreamReader reader = new StreamReader(pipe);
 
 Task ECGListener = Task.Run(async () =>
 {
-    while (true)
+    while (!ShutdownHandshake)
     {
         string? message = await reader.ReadLineAsync();
 
@@ -133,7 +133,7 @@ Task ECGListener = Task.Run(async () =>
 
 Task watchDogMonitor = Task.Run(async () => 
 {
-    while (true)
+    while (!ShutdownHandshake)
     {
         await Task.Delay(1000);
 
@@ -167,7 +167,7 @@ Task watchdogHeartbeat = Task.Run(async () =>
         AutoFlush = true
     };
 
-    while (true)
+    while (!ShutdownHandshake)
     {
         try
         {
@@ -201,6 +201,7 @@ if (ShutdownHandshake)
 {
     Console.WriteLine("System approved shutdown");
     
+    
 }
 else
 {
@@ -224,4 +225,6 @@ else
 
 Console.WriteLine("Loop terminated");
 Console.WriteLine($"Clean shutdown: {ShutdownHandshake}");
-Console.ReadLine();
+Thread.Sleep(5000);
+Console.WriteLine("SLEEP COMPLETE");
+Console.WriteLine("WATCHDOG EXITING");

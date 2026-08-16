@@ -42,9 +42,10 @@ namespace KTaNE_Virus_type_shi
             timer.Start();
         }
 
-        
-
-
+        public void Stop()
+        {
+            timer.Stop();
+        }
 
 
     }

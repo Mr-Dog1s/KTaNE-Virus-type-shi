@@ -141,9 +141,18 @@ namespace KTaNE_Virus_type_shi
         }
 
 
-        public void FlatLine()
+        public async Task FlatLine()
         {
-            heartBeatCts?.Cancel();
+            try
+            {
+                await SendMessageAsync("SHUTDOWN_APPROVED");
+
+                heartBeatCts?.Cancel();
+            }
+            catch( Exception ex )
+            {
+                Debug.WriteLine($"SHUTDOWN EXCEPTION: {ex.Message}");
+            }
         }
 
 
