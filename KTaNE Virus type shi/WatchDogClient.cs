@@ -16,9 +16,11 @@ namespace KTaNE_Virus_type_shi
         private DateTime lastWatchdogHeartbeat = DateTime.UtcNow;
 
         private NamedPipeClientStream? sendPipe;
+
         private NamedPipeClientStream? receivePipe;
 
         private StreamWriter? writer;
+
         private StreamReader? reader;
 
 
@@ -110,6 +112,7 @@ namespace KTaNE_Virus_type_shi
                 {
                     Debug.WriteLine($"DMS-Armament failed: {ex}");
                 }
+
         }
 
         public void HeartBeat()

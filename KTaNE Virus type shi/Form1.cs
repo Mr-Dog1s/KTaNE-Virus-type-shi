@@ -14,6 +14,8 @@ namespace KTaNE_Virus_type_shi
 
         private readonly CheckBox[] checkBoxes;
 
+        private ShutdownHandler shutdownHandler;
+
         public int index;
 
         public bool DMSSafetySwitch { get; private set; } = false;
@@ -57,6 +59,8 @@ namespace KTaNE_Virus_type_shi
 
             InitializeComponent();
 
+            shutdownHandler = new ShutdownHandler(this);
+
             this.FormBorderStyle = FormBorderStyle.None;
 
             WatchDogStartup();
@@ -92,6 +96,12 @@ namespace KTaNE_Virus_type_shi
 
             progressBar1.Value = 0;
 
+            progressBar2.Minimum = 0;
+
+            progressBar2.Maximum = 3;
+
+            progressBar2.Value = 0;
+
             timerHandler = new TimerHandler(60);
 
             timerHandler.TimeChanged += seconds =>
@@ -113,7 +123,7 @@ namespace KTaNE_Virus_type_shi
 
             pictureBox1.Image = Image.FromFile(ImagePath);
 
-            new InstructionGen();
+            //new InstructionGen();
 
             checkedListBox1.Items.AddRange(keyGen.Options);
 
@@ -145,7 +155,7 @@ namespace KTaNE_Virus_type_shi
             }
 
 
-            //----------------------------------------------- Debug -----------------------------------------------\\
+        //----------------------------------------------- Debug -----------------------------------------------\\
 
 
             Debug.WriteLine(string.Join(", ", keyGen.OddCorrectAnswers));
@@ -167,7 +177,7 @@ namespace KTaNE_Virus_type_shi
         //---------------------------------------------- Compts -----------------------------------------------\\
 
 
-        private void button2_Click(object sender, EventArgs e)
+        private void button2_Click(object sender, EventArgs e) // Odd one
         {
 
             bool key1 = checkedListBox1.CheckedIndices.Contains(keyGen.OddCorrectAnswers[0]);
@@ -186,10 +196,14 @@ namespace KTaNE_Virus_type_shi
                 checkedListBox1.Enabled = false;
 
             }
+            else
+            {
+                MistakeHandler(1);
+            }
         }
 
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e) //Capcha
         {
             string answerCapcha = textBox1.Text.ToLower();
 
@@ -203,10 +217,14 @@ namespace KTaNE_Virus_type_shi
                 button3.BackColor = Color.Green;
 
             }
+            else
+            {
+                MistakeHandler(1);
+            }
         }
 
 
-        private void button4_Click(object sender, EventArgs e)
+        private void button4_Click(object sender, EventArgs e) //Wire cutting
         {
             if (checkBoxes[keyGen.CorrectWire].Checked)
             {
@@ -228,11 +246,13 @@ namespace KTaNE_Virus_type_shi
             else
             {
                 checkBoxes[index].Text = "====   ====";
+                progressBar2.Value += 1;
+                MistakeHandler(1);
             }
         }
 
 
-        private void Wire_CheckedChanged(object? sender, EventArgs e)
+        private void Wire_CheckedChanged(object? sender, EventArgs e) 
         {
             CheckBox wire = (CheckBox)sender!;
 
@@ -245,22 +265,26 @@ namespace KTaNE_Virus_type_shi
         }
 
 
-        private void button5_Click(object sender, EventArgs e)
+        private void button5_Click(object sender, EventArgs e) // Yes-No question
         {
             if (radioButton1.Checked == keyGen.SimpleQuestion)
             {
 
-                UpdateProgress(100);
+                UpdateProgress(20);
 
                 button5.Enabled = false;
 
                 button5.BackColor = Color.Green;
 
             }
+            else
+            {
+                MistakeHandler(1);
+            }
         }
 
 
-        private void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e) //Date Picker
         {
             if (dateTimePicker1.Value.Date == keyGen.correctDate)
             {
@@ -274,6 +298,11 @@ namespace KTaNE_Virus_type_shi
                 dateTimePicker1.Enabled = false;
 
             }
+            else
+            {
+                MistakeHandler(1);
+            }
+
         }
 
 
@@ -326,6 +355,24 @@ namespace KTaNE_Virus_type_shi
         }
 
 
+        private void MistakeHandler(int mistake)
+        {
+            progressBar2.Value += mistake;
+
+            Debug.WriteLine("Mistake, oopsie");
+            Debug.WriteLine($"Mistake bar: {progressBar2.Value}/{progressBar2.Maximum}");
+
+            if (progressBar2.Value == 3)
+            {
+                MessageBox.Show("You cut wrong shi too many times, see ya next boot up", "BYE BYE", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                Debug.WriteLine($"You fucked up {mistake} times");
+                shutdownHandler.ShutdownHandlerExec(DMSSafetySwitch);
+                Debug.WriteLine("You will be terminated soon");
+            }
+        }
+
+
         private async Task DefusalComplete()
         {
             await watchDog.SendMessageAsync("SHUTDOWN_APPROVED");
@@ -333,7 +380,9 @@ namespace KTaNE_Virus_type_shi
             MessageBox.Show("Congrats, you have defused the bomb, the program will be terminated shortly");
             Thread.Sleep(3000);
 
-            this.Close();
+            shutdownHandler.ShutdownHandlerExec(DMSSafetySwitch);
         }
+
+
     }
 }

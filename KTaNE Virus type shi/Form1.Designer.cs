@@ -56,6 +56,7 @@
             labelToolTip1 = new Label();
             labelToolTip5 = new Label();
             toolTip1 = new ToolTip(components);
+            progressBar2 = new ProgressBar();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -306,11 +307,21 @@
             labelToolTip5.TabIndex = 25;
             labelToolTip5.Text = "?";
             // 
+            // progressBar2
+            // 
+            progressBar2.BackColor = Color.Red;
+            progressBar2.Location = new Point(11, 23);
+            progressBar2.Name = "progressBar2";
+            progressBar2.Size = new Size(130, 23);
+            progressBar2.Style = ProgressBarStyle.Continuous;
+            progressBar2.TabIndex = 26;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(795, 362);
+            Controls.Add(progressBar2);
             Controls.Add(labelToolTip5);
             Controls.Add(labelToolTip1);
             Controls.Add(labelToolTip2);
@@ -376,5 +387,6 @@
         private Label labelToolTip1;
         private Label labelToolTip5;
         private ToolTip toolTip1;
+        private ProgressBar progressBar2;
     }
 }
