@@ -320,7 +320,11 @@ namespace KTaNE_Virus_type_shi
 
         private void WatchDogStartup()
         {
-            string watchdogPath = @"C:\\Users\\scher\\source\\repos\\KTaNE Virus type shi\\KTaNEWatchDog\\bin\\Debug\\net10.0\\KTaNEWatchDog.exe";
+            string watchdogPath = 
+                Path.Combine(
+                    AppContext.BaseDirectory,
+                    "KTaNEWatchDog.exe"
+                );
 
             Process.Start(new ProcessStartInfo
             {
